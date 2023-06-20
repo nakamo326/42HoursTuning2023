@@ -240,8 +240,10 @@ export const getUserForFilter = async (
 ): Promise<UserForFilter> => {
   let userRows: RowDataPacket[];
   if (!userId) {
+    const rand = Math.floor(Math.random() * 300001);
     [userRows] = await pool.query<RowDataPacket[]>(
-      "SELECT user_id, user_name, office_id, user_icon_id FROM user ORDER BY RAND() LIMIT 1"
+      "SELECT user_id, user_name, office_id, user_icon_id FROM user WHERE employee_id = ?",
+      [`popy${rand}`]
     );
   } else {
     [userRows] = await pool.query<RowDataPacket[]>(
