@@ -111,8 +111,8 @@ export const getUsersByUserName = async (
   userName: string
 ): Promise<SearchedUser[]> => {
   const [rows] = await pool.query<RowDataPacket[]>(
-    `SELECT user_id FROM user WHERE user_name LIKE ?`,
-    [`%${userName}%`]
+    `SELECT user_id FROM user WHERE MATCH (user_name) AGAINST (? IN BOOLEAN MODE)`,
+    [`*${userName}*`]
   );
   const userIds: string[] = rows.map((row) => row.user_id);
 
@@ -121,8 +121,8 @@ export const getUsersByUserName = async (
 
 export const getUsersByKana = async (kana: string): Promise<SearchedUser[]> => {
   const [rows] = await pool.query<RowDataPacket[]>(
-    `SELECT user_id FROM user WHERE kana LIKE ?`,
-    [`%${kana}%`]
+    `SELECT user_id FROM user WHERE MATCH (kana) AGAINST (? IN BOOLEAN MODE)`,
+    [`*${kana}*`]
   );
   const userIds: string[] = rows.map((row) => row.user_id);
 
@@ -131,8 +131,8 @@ export const getUsersByKana = async (kana: string): Promise<SearchedUser[]> => {
 
 export const getUsersByMail = async (mail: string): Promise<SearchedUser[]> => {
   const [rows] = await pool.query<RowDataPacket[]>(
-    `SELECT user_id FROM user WHERE mail LIKE ?`,
-    [`%${mail}%`]
+    `SELECT user_id FROM user WHERE MATCH (mail) AGAINST (? IN BOOLEAN MODE)`,
+    [`*${mail}*`]
   );
   const userIds: string[] = rows.map((row) => row.user_id);
 
@@ -143,8 +143,8 @@ export const getUsersByDepartmentName = async (
   departmentName: string
 ): Promise<SearchedUser[]> => {
   const [departmentIdRows] = await pool.query<RowDataPacket[]>(
-    `SELECT department_id FROM department WHERE department_name LIKE ? AND active = true`,
-    [`%${departmentName}%`]
+    `SELECT department_id FROM department WHERE MATCH (department_name) AGAINST (? IN BOOLEAN MODE) AND active = true`,
+    [`*${departmentName}*`]
   );
   const departmentIds: string[] = departmentIdRows.map(
     (row) => row.department_id
@@ -166,7 +166,7 @@ export const getUsersByRoleName = async (
   roleName: string
 ): Promise<SearchedUser[]> => {
   const [roleIdRows] = await pool.query<RowDataPacket[]>(
-    `SELECT role_id FROM role WHERE role_name LIKE ? AND active = true`,
+    `SELECT role_id FROM role WHERE MATCH (role_name) AGAINST (? IN BOOLEAN MODE) AND active = true`,
     [`%${roleName}%`]
   );
   const roleIds: string[] = roleIdRows.map((row) => row.role_id);
@@ -187,7 +187,7 @@ export const getUsersByOfficeName = async (
   officeName: string
 ): Promise<SearchedUser[]> => {
   const [officeIdRows] = await pool.query<RowDataPacket[]>(
-    `SELECT office_id FROM office WHERE office_name LIKE ?`,
+    `SELECT office_id FROM office WHERE MATCH (office_name) AGAINST (? IN BOOLEAN MODE)`,
     [`%${officeName}%`]
   );
   const officeIds: string[] = officeIdRows.map((row) => row.office_id);
@@ -227,7 +227,7 @@ export const getUsersBySkillName = async (
 
 export const getUsersByGoal = async (goal: string): Promise<SearchedUser[]> => {
   const [rows] = await pool.query<RowDataPacket[]>(
-    `SELECT user_id FROM user WHERE goal LIKE ?`,
+    `SELECT user_id FROM user WHERE MATCH (goal) AGAINST (? IN BOOLEAN MODE)`,
     [`%${goal}%`]
   );
   const userIds: string[] = rows.map((row) => row.user_id);
