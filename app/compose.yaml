@@ -15,6 +15,8 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ../images/user-icon:/node/images/user-icon
+    environment:
+      - NODE_ENV=production
   frontend:
     container_name: frontend
     build:
